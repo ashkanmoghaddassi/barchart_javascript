@@ -6,28 +6,35 @@ fetch('attractions.json')
   .then(response => response.json())
   .then(data => {
 		attractions = data;
-		console.log(attractions);
-        filterData();
+        filterData("all");
 	});
 
+var mySelect = document.querySelector("#attraction-category");
+ 
+ mySelect.addEventListener("change", (event) =>
+ {
+    filterData(event.target.value);
+
+ }); 
+
 function filterData(category) {
-    let filtered = attractions;
+    let sorted = attractions.sort((a,b) => b.Visitors - a.Visitors);
+    
 
-    if(category && category != "all"){
-        filtered = filtered.filter(function(row,index){
-            return row.Category == category;
-        });  
+    if(category != "all"){ 
+        sorted = sorted.filter(attraction =>
+        attraction.Category == category); 
+
     }    
-    const JsonReversedArray= attractions.sort(function(a,b){
-        return b.Visitors - a.Visitors;
-        
-    });
-    console.log(JsonReversedArray);
+    
+    
 
-    let top5 = JsonReversedArray.filter(function(row, index){
-        return index<5;
-        
-    });
+    let top5 = [];
+    for (let i = 0; i <5; i++){
+        top5.push(sorted[i]);
+    }
+
+    
   
 
 
@@ -50,7 +57,9 @@ function filterData(category) {
 	 *
 	 * **************************************************/
 
-}
+} 
 
 // TODO: Define an event listener for the dropdown menu
 //       Call filterData with the selected category
+ 
+ 
